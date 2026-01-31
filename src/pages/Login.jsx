@@ -1,19 +1,20 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import api from "../services/api"
-import { useAuth } from "../context/AuthContext" // ✅ AuthContext import
+import { useAuth } from "../context/AuthContext"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"
 
 export default function Login() {
   const navigate = useNavigate()
-  const { login } = useAuth() // ✅ use login from context
+  const { login } = useAuth()
 
   const [formData, setFormData] = useState({
     enrollmentId: "",
     password: "",
   })
-
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -26,11 +27,7 @@ export default function Login() {
 
     try {
       const res = await api.post("/auth/login", formData)
-
-      // ✅ Save token in AuthContext (not directly localStorage)
       login(res.data.token)
-
-      // ✅ Redirect to dashboard
       navigate("/dashboard")
     } catch (err) {
       setError(err.response?.data?.message || "Login failed")
@@ -51,12 +48,9 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Error Message */}
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
-        )}
+        {/* Error */}
+        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
 
-        {/* Login Form */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Enrollment ID</label>
@@ -71,18 +65,33 @@ export default function Login() {
             />
           </div>
 
-          <div className="mb-2">
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
+          <div className="relative mb-4">
+  <label className="block text-sm font-medium mb-1">Password</label>
+
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="••••••••"
+    value={formData.password}
+    onChange={handleChange}
+    required
+    className="w-full border rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 outline-none h-12"
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-[50px] -translate-y-1/2 text-gray-500"
+    aria-label={showPassword ? "Hide password" : "Show password"}
+  >
+    {showPassword ? (
+      <EyeSlashIcon className="h-6 w-6" />
+    ) : (
+      <EyeIcon className="h-6 w-6" />
+    )}
+  </button>
+</div>
+
 
           <div className="text-right mb-6">
             <Link
