@@ -15,5 +15,7 @@
   
   html, body {
     overscroll-behavior: none; /* prevents extra space on scroll top/bottom */
+    scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   

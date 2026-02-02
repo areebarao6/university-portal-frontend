@@ -58,26 +58,26 @@ export default function Dashboard() {
   const COLORS = ["#4F46E5", "#A78BFA"]
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden  bg-gray-100 ">
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-100">
       
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar">
         
         {/* Welcome */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl font-extrabold text-gray-800"
+          className="text-2xl md:text-4xl font-extrabold text-gray-800 mb-6"
         >
           Welcome, {dashboardData.user?.name || "Student"} 👋
         </motion.h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatCard title="GPA" value={dashboardData.stats?.gpa ?? 0} />
           <StatCard
             title="Pending Fee"
@@ -90,7 +90,7 @@ export default function Dashboard() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           
           {/* GPA Chart */}
           <div className="bg-white p-6 rounded-2xl shadow-md">
@@ -161,7 +161,6 @@ export default function Dashboard() {
     </div>
   )
 }
-
 
 
 
