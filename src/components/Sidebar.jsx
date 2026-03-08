@@ -2,10 +2,12 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
 import { HiMenu, HiX } from "react-icons/hi"
 import Loader from "./Loader"
+import { useAuth } from "../context/AuthContext"
 
 export default function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [navigating, setNavigating] = useState(false)
   const [loaderMessage, setLoaderMessage] = useState("")
@@ -34,8 +36,8 @@ export default function Sidebar() {
     setLoaderMessage("Logging out...")
     setNavigating(true)
     setTimeout(() => {
-      localStorage.clear()
-      navigate("/", { replace: true })
+      logout()              // ✅ clears token AND sets isAuthenticated to false
+      navigate("/login", { replace: true })
     }, 1000)
   }
 
