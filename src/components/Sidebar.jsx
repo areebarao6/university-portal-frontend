@@ -1,15 +1,45 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
 import { HiMenu, HiX } from "react-icons/hi"
+import Loader from "./Loader"
 
 export default function Sidebar() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
+  const [navigating, setNavigating] = useState(false)
+  const [loaderMessage, setLoaderMessage] = useState("")
+
+  const navItems = [
+    { to: "/dashboard", label: "Dashboard", icon: "📊" },
+    { to: "/courses",   label: "Courses",   icon: "📚" },
+    { to: "/fees",      label: "Fees",      icon: "💳" },
+  ]
+
+  const handleNavigate = (to, label) => {
+    if (location.pathname === to) {
+      setIsOpen(false)
+      return
+    }
+    setIsOpen(false)
+    setLoaderMessage(`Loading ${label}...`)
+    setNavigating(true)
+    setTimeout(() => {
+      navigate(to)
+      setNavigating(false)
+    }, 1000)
+  }
 
   const handleLogout = () => {
-    localStorage.clear()
-    navigate("/", { replace: true })
+    setLoaderMessage("Logging out...")
+    setNavigating(true)
+    setTimeout(() => {
+      localStorage.clear()
+      navigate("/", { replace: true })
+    }, 1000)
   }
+
+  if (navigating) return <Loader message={loaderMessage} />
 
   return (
     <>
@@ -40,27 +70,18 @@ export default function Sidebar() {
           <h2 className="text-2xl font-bold mb-10">KU Portal</h2>
 
           <nav className="space-y-2">
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
-              onClick={() => setIsOpen(false)}
-            >
-              📊 Dashboard
-            </Link>
-            <Link
-              to="/courses"
-              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
-              onClick={() => setIsOpen(false)}
-            >
-              📚 Courses
-            </Link>
-            <Link
-              to="/fees"
-              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
-              onClick={() => setIsOpen(false)}
-            >
-              💳 Fees
-            </Link>
+            {navItems.map(({ to, label, icon }) => (
+              <button
+                key={to}
+                onClick={() => handleNavigate(to, label)}
+                className={`
+                  w-full flex items-center gap-2 p-3 rounded transition text-left
+                  ${location.pathname === to ? "bg-white/30 font-semibold" : "hover:bg-white/20"}
+                `}
+              >
+                {icon} {label}
+              </button>
+            ))}
           </nav>
         </div>
 
