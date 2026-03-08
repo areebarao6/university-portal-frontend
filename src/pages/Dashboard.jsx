@@ -58,14 +58,16 @@ export default function Dashboard() {
   const COLORS = ["#4F46E5", "#A78BFA"]
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-gray-100">
-      
+    // On mobile: flex-col (sidebar on top, content below)
+    // On md+: flex-row (sidebar on left, content on right)
+    <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-gray-100">
+
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar">
-        
+      {/* Main Content — add top padding on mobile to clear the fixed top bar */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar pt-16 md:pt-8">
+
         {/* Welcome */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -77,7 +79,7 @@ export default function Dashboard() {
         </motion.h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
           <StatCard title="GPA" value={dashboardData.stats?.gpa ?? 0} />
           <StatCard
             title="Pending Fee"
@@ -90,17 +92,17 @@ export default function Dashboard() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8">
+
           {/* GPA Chart */}
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-xl font-bold mb-4 text-gray-800">
+          <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md">
+            <h2 className="text-lg md:text-xl font-bold mb-4 text-gray-800">
               GPA Trend 📈
             </h2>
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={220}>
               <LineChart data={gpaData}>
-                <XAxis dataKey="month" />
-                <YAxis domain={[0, 4]} />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis domain={[0, 4]} tick={{ fontSize: 12 }} />
                 <Tooltip />
                 <Line
                   type="monotone"
@@ -113,11 +115,11 @@ export default function Dashboard() {
           </div>
 
           {/* Fee Chart */}
-          <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center">
-            <h2 className="text-xl font-bold mb-4 text-gray-800">
+          <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md flex flex-col items-center">
+            <h2 className="text-lg md:text-xl font-bold mb-4 text-gray-800">
               Fee Status 💰
             </h2>
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
                   data={feeData}
@@ -141,7 +143,7 @@ export default function Dashboard() {
         </div>
 
         {/* Announcements */}
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-6 rounded-2xl shadow-md">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-4 md:p-6 rounded-2xl shadow-md mb-6">
           <h2 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
             📢 Announcements
           </h2>

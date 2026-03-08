@@ -1,56 +1,62 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { HiMenu, HiX } from "react-icons/hi";
-
+import { HiMenu, HiX } from "react-icons/hi"
 
 export default function Sidebar() {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleLogout = () => {
-    localStorage.clear() // clear all auth data
+    localStorage.clear()
     navigate("/", { replace: true })
   }
 
   return (
     <>
-      {/* Mobile Hamburger */}
-      <div className="md:hidden flex items-center bg-indigo-600 text-white p-4 justify-between">
+      {/* Mobile Top Bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-indigo-600 text-white px-4 py-3 shadow-md">
         <h2 className="text-xl font-bold">KU Portal</h2>
-        <button onClick={() => setIsOpen(!isOpen)}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+          className="p-1 rounded hover:bg-white/20 transition"
+        >
           {isOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar Panel */}
       <div
         className={`
-          fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-indigo-600 to-purple-700 text-white p-6 flex flex-col justify-between
-          transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out
-          md:translate-x-0 md:static md:flex
+          fixed top-0 left-0 h-screen w-64 z-40
+          bg-gradient-to-b from-indigo-600 to-purple-700 text-white p-6
+          flex flex-col justify-between
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:static md:z-auto md:flex
         `}
       >
         <div>
-          <h2 className="text-2xl font-bold mb-10 hidden md:block">KU Portal</h2>
+          <h2 className="text-2xl font-bold mb-10">KU Portal</h2>
 
-          <nav className="space-y-4">
+          <nav className="space-y-2">
             <Link
               to="/dashboard"
-              className="block hover:bg-white/20 p-3 rounded"
+              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
               onClick={() => setIsOpen(false)}
             >
               📊 Dashboard
             </Link>
             <Link
               to="/courses"
-              className="block hover:bg-white/20 p-3 rounded"
+              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
               onClick={() => setIsOpen(false)}
             >
               📚 Courses
             </Link>
             <Link
               to="/fees"
-              className="block hover:bg-white/20 p-3 rounded"
+              className="flex items-center gap-2 hover:bg-white/20 p-3 rounded transition"
               onClick={() => setIsOpen(false)}
             >
               💳 Fees
@@ -60,21 +66,19 @@ export default function Sidebar() {
 
         <button
           onClick={handleLogout}
-          className="hover:bg-white/20 p-3 rounded text-left mt-6"
+          className="hover:bg-white/20 p-3 rounded text-left transition"
         >
           🔓 Logout
         </button>
       </div>
 
-      {/* Overlay for mobile */}
+      {/* Dark overlay when sidebar is open on mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
-        ></div>
+        />
       )}
     </>
   )
 }
-
-

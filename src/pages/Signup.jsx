@@ -19,7 +19,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
 
   // Regex: username must have at least 1 letter + 1 number
-  const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
